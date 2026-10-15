@@ -1,0 +1,16 @@
+# Nome `gestao-service`: é o host que o monólito/OS Service usa para chamar este serviço
+# (http://gestao-service). LoadBalancer porque o API Gateway (HTTP_PROXY) precisa de um ELB
+# público, igual ao monólito.
+apiVersion: v1
+kind: Service
+metadata:
+  name: gestao-service
+  namespace: fiap-mecanica
+spec:
+  type: LoadBalancer
+  selector:
+    app: fiap-mecanica-gestao
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP

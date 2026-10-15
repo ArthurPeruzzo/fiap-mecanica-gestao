@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: mecanica_gestao
+    ports:
+      # 3308 para não colidir com o MySQL do monólito (3307) quando os dois sobem juntos.
+      - "3308:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    ports:
+      # 8081 para rodar lado a lado com o monólito (8080).
+      - "8081:8080"
+    environment:
+      DB_URL: jdbc:mysql://db:3306/mecanica_gestao
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      # Precisa ser o MESMO JWT_SECRET do monólito: os tokens são emitidos lá (ou pela Lambda).
+      JWT_SECRET: ${JWT_SECRET}
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:

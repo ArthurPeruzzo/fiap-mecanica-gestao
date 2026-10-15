@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fiap-mecanica-gestao
+  namespace: fiap-mecanica
+  labels:
+    app: fiap-mecanica-gestao
+spec:
+  selector:
+    matchLabels:
+      app: fiap-mecanica-gestao
+  template:
+    metadata:
+      labels:
+        app: fiap-mecanica-gestao
+    spec:
+      containers:
+        - name: fiap-mecanica-gestao
+          image: "423972067332.dkr.ecr.us-east-1.amazonaws.com/fiap-mecanica-gestao:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: fiap-mecanica-gestao-config
+            - secretRef:
+                name: fiap-mecanica-gestao-secret
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "768Mi"
+          startupProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            periodSeconds: 10

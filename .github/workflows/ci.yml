@@ -1,0 +1,15 @@
+# CI — roda em toda pull request pra main. Compila, testa e empacota. Sem Terraform: este
+# serviço ainda não tem módulo de infra próprio (ECR é garantido no CD; ver README).
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    uses: ./.github/workflows/build-test.yml

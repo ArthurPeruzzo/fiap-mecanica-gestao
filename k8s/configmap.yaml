@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fiap-mecanica-gestao-config
+  namespace: fiap-mecanica
+data:
+  # Schema próprio (mecanica_gestao). createDatabaseIfNotExist enquanto o schema convive na
+  # mesma instância RDS do monólito — some quando o serviço tiver RDS próprio.
+  DB_URL: "jdbc:mysql://SEU_ENDPOINT_RDS:3306/mecanica_gestao?createDatabaseIfNotExist=true"
+  PUBLIC_BASE_URL: "https://SEU_ID.execute-api.us-east-1.amazonaws.com"

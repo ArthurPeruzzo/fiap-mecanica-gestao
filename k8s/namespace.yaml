@@ -1,0 +1,6 @@
+# Mesmo namespace do monólito: o OS Service chama este serviço por http://gestao-service
+# (DNS curto do cluster), o que só resolve dentro do mesmo namespace.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fiap-mecanica
