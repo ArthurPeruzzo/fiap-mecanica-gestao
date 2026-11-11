@@ -11,6 +11,10 @@ Microsserviço de **Gestão (Cliente + Veículo)**, extraído do monólito `fiap
   Mesmo `JWT_SECRET` (Base64URL, HS256) e `iss=mecanica-fiap`. Sem tabela `users`: as
   authorities vêm da claim `roles` do token.
 
+**Status:** extração em andamento, fora do ambiente validado da Fase 4: o API Gateway não roteia para este serviço, o monólito
+continua dono de clientes e veículos, e o repositório ainda não tem análise Sonar nem gate de cobertura. Os três serviços da Fase 4
+são `fiap-mecanica`, `fiap-estoque` e `fiap-cobranca`.
+
 Mecânico e Atendente **ficam no monólito** (ligados a `users` via FK `user_id` e ao login).
 
 ## Comandos
